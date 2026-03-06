@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# URBAN FASHION FACTORY (UFF)
 
-## Getting Started
+A comprehensive Next.js application for managing URBAN FASHION FACTORY with multiple outlets, staff, and payment tracking.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 16** (App Router)
+- **React 19**
+- **MongoDB** + Mongoose
+- **Tailwind CSS**
+- **TypeScript**
+
+## Features
+
+- **Authentication**: Login with email/password, forgot password, role-based access (Admin, Finance, HR, Employee)
+- **Localization**: English, Kannada, Hindi
+- **Accessibility**: Adjustable font sizes (12px–24px)
+- **Branches**: CRUD for URBAN FASHION FACTORY branches (Admin only)
+- **Employees**: Full employee management with user access creation, branch tagging, full-time/contractor types
+- **Profile**: View and edit personal details (name, contact, emergency number)
+- **Responsive**: Works on all screen sizes
+
+## Setup
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment**
+   ```bash
+   cp .env.example .env.local
+   ```
+   Edit `.env.local` and set:
+   - `MONGODB_URI` – MongoDB connection string
+   - `JWT_SECRET` – Secret for JWT tokens
+
+3. **Start MongoDB** (if running locally)
+   ```bash
+   mongod
+   ```
+
+4. **Seed admin user + dummy data**
+   ```bash
+   npm run seed
+   ```
+   Creates admin user and sample data (branches, employees, rates, work records, payments).
+   **Admin credentials:** `admin@uff.com` / `Admin@123`
+
+5. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000)
+
+## Role Permissions
+
+| Feature      | Admin | Finance | HR | Employee |
+|-------------|-------|---------|-----|----------|
+| Branches    | ✓     | ✗       | ✗   | ✗        |
+| Employees   | ✓ (any role) | ✓ (employee only) | ✓ (employee only) | ✗ |
+| Profile     | ✓     | ✓       | ✓   | ✓        |
+| Home        | ✓     | ✓       | ✓   | ✓        |
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── (dashboard)/     # Authenticated routes
+│   │   ├── branches/
+│   │   ├── employees/
+│   │   ├── profile/
+│   │   └── page.tsx     # Home
+│   ├── api/             # API routes
+│   │   ├── auth/
+│   │   ├── branches/
+│   │   ├── employees/
+│   │   └── profile/
+│   └── login/
+├── components/
+├── contexts/
+├── lib/
+│   ├── models/
+│   └── ...
+└── ...
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Notes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Password reset uses in-memory OTP storage (dev). Use Redis for production.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**MongoDB connection refused?** Ensure MongoDB is running locally (`mongod` or `sudo systemctl start mongod`) or set `MONGODB_URI` in `.env.local` to a MongoDB Atlas connection string.
 
-## Learn More
+**Invalid credentials with admin@uff.com?** Run `npm run seed` to create the admin user (and dummy data), or `npm run seed:admin` to create/reset only the admin: `admin@uff.com` / `Admin@123`
+- When an employee is disabled, their login is also disabled.
+- Employee creation auto-generates a user account with a random password (shown once in a modal).
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Email	admin@uff.com
+Password	Admin@123
